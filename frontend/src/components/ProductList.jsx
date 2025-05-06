@@ -1,7 +1,7 @@
 // src/components/ProductList.jsx
 import React, { useState, useEffect } from 'react';
 
-const ProductList = () => {
+const ProductList = ({ onEdit }) => {
   const API = import.meta.env.VITE_API_URL;
   const [productos, setProductos] = useState([]);
   const [categoria, setCategoria] = useState('');
@@ -27,6 +27,28 @@ const ProductList = () => {
       console.error('Error al obtener productos', error);
     }
   };
+
+  const handleDelete = async (id) => {
+    const confirmar = window.confirm("¿Estás seguro de que querés eliminar este producto?");
+    if (!confirmar) return;
+  
+    try {
+      const response = await fetch(`http://localhost:5000/api/productos/${id}`, {
+        method: "DELETE",
+      });
+  
+      if (response.ok) {
+        // Si usás estado local para los productos:
+        setProductos((prev) => prev.filter((producto) => producto._id !== id));
+        alert("Producto eliminado exitosamente.");
+      } else {
+        console.error("Error al eliminar el producto");
+      }
+    } catch (error) {
+      console.error("Error de red:", error);
+    }
+  };
+  
 
   useEffect(() => {
     fetchProductos();
@@ -60,8 +82,8 @@ const ProductList = () => {
         >
           <option value="">Todas las categorías</option>
           <option value="mochilas">Mochilas</option>
-          <option value="billeteras">Billeteras</option>
-          <option value="valijas">Valijas</option>
+          <option value="Bolso">Bolso</option>
+          <option value="rinonera">Riñonera</option>
         </select>
       </div>
 
@@ -77,6 +99,21 @@ const ProductList = () => {
       <p className="text-sm text-gray-600">{p.categoria}</p>
       <p className="text-green-600 font-bold">${p.precio}</p>
       <p className="text-sm">Stock: {p.stock}</p>
+      <button
+        onClick={() => {
+          console.log(p); // Verifica que el producto tenga un id válido
+          onEdit(p); // Pasar el producto a editar
+        }}
+        className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+      >
+        Editar
+      </button>
+      <button
+        onClick={() => handleDelete(p._id)}
+        className="mt-2 ml-2 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+      >
+        Eliminar
+      </button>
     </div>
   ))}
       </div>
