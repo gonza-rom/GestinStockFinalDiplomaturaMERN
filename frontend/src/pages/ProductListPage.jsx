@@ -1,11 +1,26 @@
-import React from 'react';
+// src/pages/ProductListPage.jsx
+import React, { useState } from 'react';
 import ProductList from '../components/ProductList';
+import EditProductForm from '../components/EditProductForm';
 
 const ProductListPage = () => {
+  const [editingProduct, setEditingProduct] = useState(null);
+
+  const handleEdit = (product) => {
+    setEditingProduct(product);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingProduct(null);
+  };
+
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Listado de Productos</h1>
-      <ProductList />
+    <div>
+      {editingProduct ? (
+        <EditProductForm product={editingProduct} onCancel={handleCancelEdit} />
+      ) : (
+        <ProductList onEdit={handleEdit} />
+      )}
     </div>
   );
 };
