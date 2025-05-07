@@ -8,7 +8,7 @@ const ProductList = ({ onEdit }) => {
   const [nombre, setNombre] = useState('');
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const limit = 5;
+  const limit = 10;
 
   const fetchProductos = async () => {
     try {
@@ -87,7 +87,7 @@ const ProductList = ({ onEdit }) => {
         </select>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-10 gap-4">
   {productos.map((p) => (
     <div key={p._id} className="border p-4 rounded shadow max-w-sm mx-auto">
       <img
